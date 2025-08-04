@@ -1,0 +1,430 @@
+basePath: /api/v1
+definitions:
+  models.CreateFlashCard:
+    properties:
+      categoryId:
+        type: integer
+      content:
+        type: string
+      name:
+        type: string
+    required:
+    - categoryId
+    - content
+    - name
+    type: object
+  models.CreateFlashCardCategory:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  models.CreateHabit:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  models.CreateHabitLog:
+    properties:
+      completedAt:
+        type: string
+      id:
+        type: integer
+    type: object
+  models.FlashCard:
+    properties:
+      content:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - content
+    - createdAt
+    - id
+    - name
+    type: object
+  models.Habit:
+    properties:
+      entries:
+        items:
+          $ref: '#/definitions/models.HabitLog'
+        type: array
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - entries
+    - id
+    - name
+    type: object
+  models.HabitLog:
+    properties:
+      completedAt:
+        type: string
+      habitId:
+        type: integer
+      id:
+        type: integer
+    type: object
+  models.LoginUserPayload:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  models.RegisterUserPayload:
+    properties:
+      email:
+        type: string
+      password:
+        maxLength: 130
+        minLength: 3
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  models.User:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /flashcard:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a specific flash card by ID
+      parameters:
+      - description: ID of the flash card to delete
+        in: query
+        name: cardId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete a flash card
+      tags:
+      - flash-card
+    get:
+      consumes:
+      - application/json
+      description: Returns flash cards for the authenticated user using pagination
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Items per page
+        in: query
+        name: perPage
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.FlashCard'
+            type: array
+      summary: Get paginated list of flash cards
+      tags:
+      - flash-card
+    post:
+      consumes:
+      - application/json
+      description: Creates a new flash card for the authenticated user
+      parameters:
+      - description: Flash card data
+        in: body
+        name: card
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateFlashCard'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.FlashCard'
+      summary: Create a new flash card
+      tags:
+      - flash-card
+  /flashcard/category:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a flashcard category by its ID
+      parameters:
+      - description: ID of the category to delete
+        in: query
+        name: categoryId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete a flashcard category
+      tags:
+      - flashcard-category
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all flashcard categories for the authenticated user
+      produces:
+      - application/json
+      responses: {}
+      summary: Get flashcard categories
+      tags:
+      - flashcard-category
+    post:
+      consumes:
+      - application/json
+      description: Creates a new flashcard category for the user
+      parameters:
+      - description: Flashcard category payload
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateFlashCardCategory'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Create a flashcard category
+      tags:
+      - flashcard-category
+  /habit:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a habit for the authenticated user by ID.
+      parameters:
+      - description: ID of the habit to be deleted
+        in: query
+        name: habitId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete habit
+      tags:
+      - habit
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of habits for the authenticated user, including
+        related entries.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Habit'
+            type: array
+      summary: Get list of habits
+      tags:
+      - habit
+    post:
+      consumes:
+      - application/json
+      description: Creates and returns a new habit
+      parameters:
+      - description: Habit payload
+        in: body
+        name: habit
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateHabit'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Habit'
+      summary: Create a new habit
+      tags:
+      - habit
+  /habit/log:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all habit entries for the authenticated user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.HabitLog'
+            type: array
+      summary: Get list of habit entries
+      tags:
+      - habit-entry
+    post:
+      consumes:
+      - application/json
+      description: Creates a new habit entry for a specific habit ID.
+      parameters:
+      - description: ID of the habit
+        in: query
+        name: habitId
+        required: true
+        type: integer
+      - description: Create Habit Entry payload
+        in: body
+        name: entry
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateHabitLog'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.HabitLog'
+      summary: Create habit entry
+      tags:
+      - habit-entry
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Logs in a user and returns a JWT token
+      parameters:
+      - description: Login payload
+        in: body
+        name: loginUser
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginUserPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: invalid input or credentials
+          schema:
+            type: string
+        "500":
+          description: internal error
+          schema:
+            type: string
+      summary: User login
+      tags:
+      - auth
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user
+      parameters:
+      - description: Register payload
+        in: body
+        name: registerUser
+        required: true
+        schema:
+          $ref: '#/definitions/models.RegisterUserPayload'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: invalid input or user exists
+          schema:
+            type: string
+        "500":
+          description: internal error
+          schema:
+            type: string
+      summary: Register user
+      tags:
+      - auth
+  /users/{userID}:
+    get:
+      description: Retrieves a user by their ID (admin route)
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user by ID
+      tags:
+      - users
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"
