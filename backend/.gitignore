@@ -1,6 +1,4 @@
-.envrc
-.env
-bin
-tmp
-
-
+*.beam
+*.ez
+/build
+erl_crash.dump
