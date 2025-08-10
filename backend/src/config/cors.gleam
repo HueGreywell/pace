@@ -1,7 +1,7 @@
 import cors_builder as cors
 import gleam/http
 
-pub fn initiate_cors() {
+pub fn setup_cors() {
   cors.new()
   |> cors.allow_origin("*")
   |> cors.allow_all_origins()

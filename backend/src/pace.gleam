@@ -1,19 +1,34 @@
-import gleam/io
+import api/middleware.{Context}
+import api/router
+import config/env.{load_config}
+import gleam/erlang/process
+import infra/database/migratons/migrations
+import mist
+import shork
+import wisp/wisp_mist
 
 pub fn main() {
-  io.print("hello from cli")
+  let config = load_config()
+  let db =
+    shork.default_config()
+    |> shork.user(config.db_user)
+    |> shork.password(config.db_password)
+    |> shork.host(config.db_host)
+    |> shork.database(config.db)
+    |> shork.connect
+
+  migrations.run(db)
+
+  let context = Context(db: db, secret_key: config.secret_key)
+
+  let handler = router.handle_request(_, context)
+
+  let assert Ok(_) =
+    handler
+    |> wisp_mist.handler(config.secret_key)
+    |> mist.new()
+    |> mist.port(8000)
+    |> mist.start()
+
+  process.sleep_forever()
 }
-
-fn load_application_secret() -> String {
-  os.get_env("SECRET_KEY")
-  |> result.unwrap("SECRET_KEY is not set.")
-}
-
-
-pub fn get_env_var(name: String) -> Option(String) {
-  erlang.call("os", "getenv", [erlang.atom(name)])
-  |> case {
-    erlang.NIL -> None
-    value -> 
-      Some(erlang.binary_to_string(value))
-  }
