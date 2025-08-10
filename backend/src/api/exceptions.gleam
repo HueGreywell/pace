@@ -43,15 +43,15 @@ pub fn exception_to_details(exception: Exception) -> #(String, String) {
     )
     PasswordTooShort -> #(
       "Password is too short min length is 8",
-      "PASSWORD_TOO_SHORT",
+      "SHORT_PASSWORD",
     )
     PasswordEmpty -> #(
       "Password is empty",
-      "PASSWORD_IS_EMPTY"
+      "EMPTY_PASSWORD"
     )
     UsernameTooLong -> #(
       "Username is too long max chars is 30",
-      "USERNAME_TOO_LONG",
+      "LONG_USERNAME",
     )
   }
 }
