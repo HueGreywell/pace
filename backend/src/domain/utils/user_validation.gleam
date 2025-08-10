@@ -1,6 +1,6 @@
 import api/exceptions.{
-  type Exception, InvalidEmailFormat, PasswordTooShort, UsernameEmpty,
-  UsernameTooLong,
+  type Exception, InvalidEmailFormat, PasswordEmpty, PasswordTooShort,
+  UsernameEmpty, UsernameTooLong,
 }
 
 import gleam/regexp
@@ -19,6 +19,7 @@ pub fn check_password(password: String) -> Result(String, Exception) {
   let length = string.length(password)
   case length {
     length if length <= 8 -> Error(PasswordTooShort)
+    0 -> Error(PasswordEmpty)
     _ -> Ok(password)
   }
 }

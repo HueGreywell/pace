@@ -1,3 +1,6 @@
+///
+/// THIS FILE IS FORMATED BY HAND 
+///
 import gleam/json
 
 pub type Exception {
@@ -6,42 +9,49 @@ pub type Exception {
   UsernameEmpty
   UsernameTooLong
   PasswordTooShort
+  PasswordEmpty
   JsonDecodeError
   InvalidEmailFormat
 }
 
 pub fn exception_response(exception: Exception) -> json.Json {
-  let generic_err =
-    ExceptionMsg(message: "Something went wrong", code: "GENERIC_ERROR")
+  let #(message, code) = exception_to_details(exception)
 
-  let exception_msg = case exception {
-    DatabaseException -> generic_err
-    GenericError -> generic_err
-    InvalidEmailFormat ->
-      ExceptionMsg(message: "Invalid email format", code: "INVALID_EMAIL")
-    JsonDecodeError ->
-      ExceptionMsg(message: "Invalid json", code: "INVALID_JSON")
-    PasswordTooShort ->
-      ExceptionMsg(message: "Password too short", code: "PASSWOR_TOO_SHORT")
-    UsernameTooLong ->
-      ExceptionMsg(
-        message: "Username too long max chars is 30",
-        code: "USERNAME_TOO_LONG",
-      )
-    UsernameEmpty ->
-      ExceptionMsg(message: "Username is empty", code: "EMPTY_USERNAME")
-  }
-
-  encode_exception_msg(exception_msg)
-}
-
-pub type ExceptionMsg {
-  ExceptionMsg(message: String, code: String)
-}
-
-pub fn encode_exception_msg(exception: ExceptionMsg) -> json.Json {
   json.object([
-    #("message", json.string(exception.message)),
-    #("code", json.string(exception.code)),
+    #("message", json.string(message)),
+    #("code", json.string(code)),
   ])
+}
+
+pub fn exception_to_details(exception: Exception) -> #(String, String) {
+  case exception {
+    InvalidEmailFormat -> #(
+      "Invalid email format",
+      "INVALID_EMAIL"
+    )
+    JsonDecodeError -> #(
+      "Invalid json",
+      "INVALID_JSON"
+    )
+    UsernameEmpty -> #(
+      "Username is empty",
+      "EMPTY_USERNAME"
+    )
+    DatabaseException | GenericError -> #(
+      "Something went wrong",
+      "GENERIC_ERROR",
+    )
+    PasswordTooShort -> #(
+      "Password is too short min length is 8",
+      "PASSWORD_TOO_SHORT",
+    )
+    PasswordEmpty -> #(
+      "Password is empty",
+      "PASSWORD_IS_EMPTY"
+    )
+    UsernameTooLong -> #(
+      "Username is too long max chars is 30",
+      "USERNAME_TOO_LONG",
+    )
+  }
 }
