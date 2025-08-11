@@ -1,7 +1,10 @@
 import api/exceptions.{type Exception}
 import api/middleware.{type Context, respond_with_exception}
 import domain/register/register.{type Register, decode_register}
-import domain/utils/user_validation.{check_email, check_password, check_username}
+import domain/utils/user_validation.{
+  check_email, check_password, check_username, does_user_exist,
+}
+import gleam/option.{None, Some}
 import infra/database/db_calls
 import wisp.{type Request, type Response}
 
@@ -14,9 +17,13 @@ pub fn on_register(req: Request, context: Context) -> Response {
       case validate(register) {
         Error(value) -> respond_with_exception(400, value)
         Ok(_) -> {
-          case db_calls.insert_user(register, context.db) {
-            Error(error) -> respond_with_exception(500, error)
-            _ -> wisp.created()
+          case does_user_exist(register.username, register.email, context.db) {
+            Some(exception) -> respond_with_exception(400, exception)
+            None ->
+              case db_calls.insert_user(register, context.db) {
+                Error(error) -> respond_with_exception(500, error)
+                _ -> wisp.created()
+              }
           }
         }
       }
@@ -32,8 +39,8 @@ fn validate(register: Register) -> Result(Nil, Exception) {
         Error(value) -> Error(value)
         Ok(_) -> {
           case check_username(register.username) {
-            Ok(_) -> Ok(Nil)
             Error(value) -> Error(value)
+            Ok(_) -> Ok(Nil)
           }
         }
       }

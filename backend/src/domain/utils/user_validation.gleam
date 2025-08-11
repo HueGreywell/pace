@@ -2,9 +2,11 @@ import api/exceptions.{
   type Exception, InvalidEmailFormat, PasswordEmpty, PasswordTooShort,
   UsernameEmpty, UsernameTooLong,
 }
-
+import gleam/option.{type Option, None, Some}
 import gleam/regexp
 import gleam/string
+import infra/database/db_calls
+import shork
 
 pub fn check_username(username: String) -> Result(String, Exception) {
   let length = string.length(username)
@@ -33,5 +35,25 @@ pub fn check_email(email: String) -> Result(String, Exception) {
       }
 
     Error(_) -> Error(InvalidEmailFormat)
+  }
+}
+
+pub fn does_user_exist(
+  username: String,
+  email: String,
+  connection: shork.Connection,
+) -> Option(Exception) {
+  let user = db_calls.get_user_by_email(email, connection)
+  case user {
+    Ok(None) -> {
+      let user = db_calls.get_user_by_username(username, connection)
+      case user {
+        Ok(Some(_)) -> Some(exceptions.UserWithUsernameExists)
+        Error(value) -> Some(value)
+        Ok(None) -> None
+      }
+    }
+    Ok(Some(_)) -> Some(exceptions.UserWithEmailExists)
+    Error(value) -> Some(value)
   }
 }
