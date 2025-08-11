@@ -1,3 +1,5 @@
+import api/exceptions.{type Exception}
+import gleam/json
 import shork.{type Connection}
 import wisp
 
@@ -16,4 +18,10 @@ pub fn middleware(
   use <- wisp.rescue_crashes
   use req <- wisp.handle_head(req)
   handle_request(req)
+}
+
+pub fn respond_with_exception(code: Int, exception: Exception) {
+  let error_msg = exceptions.exception_response(exception)
+  wisp.response(code)
+  |> wisp.string_body(json.to_string(error_msg))
 }

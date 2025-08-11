@@ -18,8 +18,8 @@ pub fn check_username(username: String) -> Result(String, Exception) {
 pub fn check_password(password: String) -> Result(String, Exception) {
   let length = string.length(password)
   case length {
-    length if length <= 8 -> Error(PasswordTooShort)
     0 -> Error(PasswordEmpty)
+    length if length <= 8 -> Error(PasswordTooShort)
     _ -> Ok(password)
   }
 }
