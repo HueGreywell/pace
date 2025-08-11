@@ -12,8 +12,6 @@ pub fn handle_request(req: Request, ctx: Context) -> Response {
   use req <- cors.wisp_middleware(req, apps_cors.setup_cors())
 
   case wisp.path_segments(req) {
-    //["users"] -> users.get_users_view(req, ctx)
-    //["users", uuid] -> users.get_user_view(req, ctx, uuid)
     ["login"] -> login.on_login(req, ctx)
     ["register"] -> register.on_register(req, ctx)
     //["logout"] -> logout.logout_view(req, ctx)
