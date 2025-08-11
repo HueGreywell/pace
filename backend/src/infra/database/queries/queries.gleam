@@ -1,28 +1,36 @@
 pub const get_users = "
   SELECT
-    id::text, username, password, email
+    id, username, password, email
   FROM
     users"
 
 pub const get_user = "
   SELECT
-    id::text, username, password, email
+    id, username, password, email
   FROM
     users
   WHERE
-    id = $1"
+    id = ?"
+
+pub const get_user_by_username = "
+  SELECT
+    id, username, password, email
+  FROM
+    users
+  WHERE
+    username = ?"
 
 pub const get_user_by_email = "
   SELECT
-    id::text, username, password, email
+    id, username, password, email
   FROM
     users
   WHERE
-    email = $1"
+    email = ?"
 
 pub const create_user = "
   INSERT INTO users
-    (id, username, password, email)
+    (id, username, email, password)
   VALUES
     (?, ?, ?, ?)"
 
