@@ -1,5 +1,7 @@
+import api/auth/access_token
 import api/middleware.{Context}
 import api/router
+import birl
 import config/env.{load_config}
 import gleam/erlang/process
 import infra/database/migratons/migrations
@@ -8,6 +10,7 @@ import shork
 import wisp/wisp_mist
 
 pub fn main() {
+  token_test()
   let config = load_config()
   let db =
     shork.default_config()
@@ -31,4 +34,33 @@ pub fn main() {
     |> mist.start()
 
   process.sleep_forever()
+}
+
+fn wait_two_seconds() {
+  process.sleep(2000)
+}
+
+fn second_from_now() -> Int {
+  birl.to_unix(birl.now()) + 1
+}
+
+fn generate_token() -> String {
+  access_token.create_access_token_raw(
+    secret_key: "secret_key",
+    id: "12",
+    expiration: second_from_now(),
+  )
+}
+
+pub fn token_test() {
+  let token = generate_token()
+  wait_two_seconds()
+  let is_valid = access_token.verify_access_token(token, "secret_key")
+  echo is_valid == False
+  echo "first one is expired"
+
+  let token = generate_token()
+  let is_valid = access_token.verify_access_token(token, "secret_key")
+  echo "Seconds is not expired"
+  echo is_valid == True
 }

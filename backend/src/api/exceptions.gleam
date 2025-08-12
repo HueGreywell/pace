@@ -4,6 +4,7 @@
 import gleam/json
 
 pub type Exception {
+  NotAuthenticated
   DatabaseException
   GenericError
   UsernameEmpty
@@ -48,5 +49,6 @@ pub fn exception_to_details(exception: Exception) -> #(String, String) {
       "User with this username exist",
       "USER_USERNAME_EXIST",
     )
+    NotAuthenticated -> #("Not authenticated", "NOT_AUTHENTICATED")
   }
 }
