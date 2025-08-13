@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS users (
 )"
 
 const setup_refresh_tokens_table = "CREATE TABLE IF NOT EXISTS refresh_tokens (
-  id SERIAL PRIMARY KEY,
+  id uuid PRIMARY KEY,
   user_id uuid,
   token VARCHAR(255),
   FOREIGN KEY (user_id) REFERENCES users(id)

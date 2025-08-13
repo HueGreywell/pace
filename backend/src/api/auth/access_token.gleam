@@ -9,19 +9,23 @@ pub fn one_hour_from_now() -> Int {
   birl.to_unix(birl.now()) + 3600
 }
 
-pub fn create_access_token(secret_key: String, id: String) -> String {
-  create_access_token_raw(secret_key:, id:, expiration: one_hour_from_now())
+pub fn create_access_token(secret_key: String, user_id: String) -> String {
+  create_access_token_raw(
+    secret_key:,
+    user_id:,
+    expiration: one_hour_from_now(),
+  )
 }
 
 /// Open for testing use [create_access_token]
 pub fn create_access_token_raw(
   secret_key secret_key: String,
-  id id: String,
+  user_id user_id: String,
   expiration expiration: Int,
 ) -> String {
   let jwt =
     gwt.new()
-    |> gwt.set_subject(id)
+    |> gwt.set_subject(user_id)
     |> gwt.set_issued_at(birl.to_unix(birl.now()))
     |> gwt.set_expiration(expiration)
     |> gwt.set_jwt_id(v4_string())
@@ -31,14 +35,13 @@ pub fn create_access_token_raw(
 }
 
 pub fn get_auth_header(req: Request) -> #(Bool, String) {
-  case list.key_find(req.headers, "Authorization") {
+  case list.key_find(req.headers, "authorization") {
     Ok(auth) -> {
       // drop "Bearer "
       let token = string.drop_start(auth, 7)
       #(True, token)
     }
     Error(_) -> {
-      echo 123
       #(False, "")
     }
   }
@@ -54,6 +57,9 @@ pub fn verify_access_token(jwt: String, secret_key: String) -> Bool {
         _ -> False
       }
     }
-    Error(_) -> False
+    Error(err) -> {
+      echo err
+      False
+    }
   }
 }

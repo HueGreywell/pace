@@ -6,6 +6,8 @@ packages = [
   { name = "argon2_elixir", version = "4.1.3", build_tools = ["mix", "make"], requirements = ["comeonin", "elixir_make"], otp_app = "argon2_elixir", source = "hex", outer_checksum = "7C295B8D8E0EAF6F43641698F962526CDF87C6FEB7D14BD21E599271B510608C" },
   { name = "birl", version = "1.8.0", build_tools = ["gleam"], requirements = ["gleam_regexp", "gleam_stdlib", "ranger"], otp_app = "birl", source = "hex", outer_checksum = "2AC7BA26F998E3DFADDB657148BD5DDFE966958AD4D6D6957DD0D22E5B56C400" },
   { name = "comeonin", version = "5.5.1", build_tools = ["mix"], requirements = [], otp_app = "comeonin", source = "hex", outer_checksum = "65AAC8F19938145377CEE73973F192C5645873DCF550A8A6B18187D17C13CCDB" },
+  { name = "convert", version = "1.0.2", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "convert", source = "hex", outer_checksum = "C49E5DAA0B5907DEACE8790C1517ACC37630EED56B62BD3CF90EB83CB0E0B81D" },
+  { name = "convert_json", version = "2.0.0", build_tools = ["gleam"], requirements = ["convert", "gleam_json", "gleam_stdlib"], otp_app = "convert_json", source = "hex", outer_checksum = "6B53CC5338AFE3C3FE1F3918E4E669504022C0CDAFA4FAFFF8FCB7FF01B6E926" },
   { name = "cors_builder", version = "2.0.5", build_tools = ["gleam"], requirements = ["gleam_http", "gleam_stdlib", "mist", "wisp"], otp_app = "cors_builder", source = "hex", outer_checksum = "FD6492C80E3F0403730209597B9CA9CA8CC0B3D0FFEC0D778ACDF9B6FD25E88A" },
   { name = "directories", version = "1.2.0", build_tools = ["gleam"], requirements = ["envoy", "gleam_stdlib", "platform", "simplifile"], otp_app = "directories", source = "hex", outer_checksum = "D13090CFCDF6759B87217E8DDD73A75903A700148A82C1D33799F333E249BF9E" },
   { name = "dot_env", version = "1.2.0", build_tools = ["gleam"], requirements = ["gleam_stdlib", "simplifile"], otp_app = "dot_env", source = "hex", outer_checksum = "F2B4815F1B5AF8F20A6EADBB393E715C4C35203EBD5BE8200F766EA83A0B18DE" },
@@ -45,6 +47,8 @@ packages = [
 [requirements]
 antigone = { version = ">= 1.1.0 and < 2.0.0" }
 birl = { version = ">= 1.8.0 and < 2.0.0" }
+convert = { version = ">= 1.0.2 and < 2.0.0" }
+convert_json = { version = ">= 2.0.0 and < 3.0.0" }
 cors_builder = { version = ">= 2.0.5 and < 3.0.0" }
 dot_env = { version = ">= 1.2.0 and < 2.0.0" }
 gleam_erlang = { version = "~> 1.0.0" }

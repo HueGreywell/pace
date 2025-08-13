@@ -1,6 +1,7 @@
 import api/auth/access_token
 import api/auth/login
 import api/auth/register
+import api/auth/reset_token
 import api/exceptions
 import api/middleware.{type Context, middleware}
 import config/cors as apps_cors
@@ -14,8 +15,9 @@ pub fn handle_request(req: Request, ctx: Context) -> Response {
   case wisp.path_segments(req) {
     ["login"] -> login.on_login(req, ctx)
     ["register"] -> register.on_register(req, ctx)
-    ["routes"] -> guarded(req, ctx, login.on_login)
+    ["refresh-token"] -> reset_token.refresh_token(req, ctx)
     //["logout"] -> logout.logout_view(req, ctx)
+    //["routes"] -> guarded(req, ctx, login.on_login)
     //["refresh-token"] -> refresh_token.refresh_token_view(req, ctx)
     _ -> wisp.not_found()
   }
@@ -33,10 +35,9 @@ fn guarded(
     #(True, token) -> {
       case access_token.verify_access_token(token, context.secret_key) {
         False ->
-          middleware.respond_with_exception(401, exceptions.NotAuthenticated)
+          middleware.respond_with_exception(500, exceptions.NotAuthenticated)
         True -> route_handler(req, context)
       }
     }
   }
-  //result.try
 }

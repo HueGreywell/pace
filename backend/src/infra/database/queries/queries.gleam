@@ -12,6 +12,14 @@ pub const get_user = "
   WHERE
     id = ?"
 
+pub const get_user_by_id = "
+  SELECT
+    id, username, password, email
+  FROM
+    users
+  WHERE
+    id = ?"
+
 pub const get_user_by_username = "
   SELECT
     id, username, password, email
@@ -36,16 +44,15 @@ pub const create_user = "
 
 pub const create_refresh_token = "
   INSERT INTO refresh_tokens
-    (user_id, token)
+    (id, user_id, token)
   VALUES
-    ($1, $2)
-  RETURNING
-    id, user_id::text, token"
+    (?, ?, ?)
+  "
 
 pub const get_refresh_token_by_user_id = "
   SELECT 
-    id, user_id::text, token
+    id, user_id, token
   FROM
     refresh_tokens
   WHERE
-    user_id = $1"
+    user_id = ?"

@@ -13,7 +13,7 @@ fn second_from_now() -> Int {
 fn generate_token() -> String {
   access_token.create_access_token_raw(
     secret_key: "secret_key",
-    id: "12",
+    user_id: "12",
     expiration: second_from_now(),
   )
 }
