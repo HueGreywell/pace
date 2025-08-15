@@ -1,7 +1,7 @@
 import config/cors as c
 import controllers/login
 import cors_builder as cors
-import shared/context.{Context}
+import utils/context.{Context}
 import shork
 import wisp.{type Request, type Response}
 
