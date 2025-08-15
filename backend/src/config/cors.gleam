@@ -12,4 +12,3 @@ pub fn setup_cors() {
   |> cors.allow_header("Origin")
   |> cors.allow_header("Authorization")
 }
-//https://github.com/donnaloia/authentication-service/blob/main/src/auth_server.gleam

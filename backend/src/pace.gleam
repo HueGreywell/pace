@@ -1,15 +1,14 @@
-import api/middleware.{Context}
-import api/router
 import config/env.{load_config}
 import gleam/erlang/process
-import infra/database/migratons/migrations
+import infra/migrations/migrations
 import mist
+import router
 import shork
 import wisp/wisp_mist
 
 pub fn main() {
   let config = load_config()
-  let db =
+  let connection =
     shork.default_config()
     |> shork.user(config.db_user)
     |> shork.password(config.db_password)
@@ -17,11 +16,9 @@ pub fn main() {
     |> shork.database(config.db)
     |> shork.connect
 
-  migrations.run(db)
+  migrations.run(connection)
 
-  let context = Context(db: db, secret_key: config.secret_key)
-
-  let handler = router.handle_request(_, context)
+  let handler = router.handle_request(_, connection, config.secret_key)
 
   let assert Ok(_) =
     handler
