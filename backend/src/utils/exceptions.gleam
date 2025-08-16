@@ -1,5 +1,3 @@
-import gleam/json
-
 pub type Exception {
   NotAuthenticated
   DatabaseException
