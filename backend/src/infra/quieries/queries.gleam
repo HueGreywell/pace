@@ -35,3 +35,18 @@ pub const create_user = "
     (id, username, email, password)
   VALUES
     (?, ?, ?, ?)"
+
+pub const create_refresh_token = "
+  INSERT INTO refresh_tokens
+    (id, user_id, token)
+  VALUES
+    (?, ?, ?)
+  "
+
+pub const get_refresh_token_by_user_id = "
+  SELECT 
+    id, user_id, token
+  FROM
+    refresh_tokens
+  WHERE
+    user_id = ?"
