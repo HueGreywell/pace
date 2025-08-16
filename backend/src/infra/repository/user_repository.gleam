@@ -1,30 +1,32 @@
+import dtos/register_dto.{type Register}
 import gleam/dynamic/decode
 import gleam/option.{type Option, None, Some}
 import infra/quieries/queries
 import models/user.{type User, User}
 import shork.{type Connection}
 import utils/exceptions.{type Exception, DatabaseException}
+import utils/password_hash
 import youid/uuid
 
-// pub fn insert_user(
-//   payload: Register,
-//   connection: Connection,
-// ) -> Result(Nil, Exception) {
-//   let hashed_password = password_utils.hash_password(payload.password)
-//   let query =
-//     shork.query(queries.create_user)
-//     |> shork.parameter(shork.text(uuid.v4_string()))
-//     |> shork.parameter(shork.text(payload.username))
-//     |> shork.parameter(shork.text(payload.email))
-//     |> shork.parameter(shork.text(hashed_password))
-//
-//   let result = shork.execute(query, connection)
-//
-//   case result {
-//     Ok(_) -> Ok(Nil)
-//     Error(_) -> Error(DatabaseException)
-//   }
-// }
+pub fn insert_user(
+  payload: Register,
+  connection: Connection,
+) -> Result(Nil, Exception) {
+  let hashed_password = password_hash.hash_password(payload.password)
+  let query =
+    shork.query(queries.create_user)
+    |> shork.parameter(shork.text(uuid.v4_string()))
+    |> shork.parameter(shork.text(payload.username))
+    |> shork.parameter(shork.text(payload.email))
+    |> shork.parameter(shork.text(hashed_password))
+
+  let result = shork.execute(query, connection)
+
+  case result {
+    Ok(_) -> Ok(Nil)
+    Error(_) -> Error(DatabaseException)
+  }
+}
 
 pub fn get_user_by_id(
   username: String,

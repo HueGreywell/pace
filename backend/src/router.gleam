@@ -1,8 +1,9 @@
 import config/cors as c
 import controllers/login
+import controllers/register
 import cors_builder as cors
-import utils/context.{Context}
 import shork
+import utils/context.{Context}
 import wisp.{type Request, type Response}
 
 pub fn handle_request(
@@ -17,7 +18,7 @@ pub fn handle_request(
 
   case wisp.path_segments(req) {
     ["login"] -> login.handler(ctx)
-    //["register"] -> register.on_register(req, ctx)
+    ["register"] -> register.handler(ctx)
     //["refresh-token"] -> reset_token.refresh_token(req, ctx)
     //["logout"] -> logout.logout_view(req, ctx)
     _ -> wisp.not_found()

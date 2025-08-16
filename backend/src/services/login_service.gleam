@@ -1,5 +1,5 @@
-import dtos/auth_dto
 import antigone
+import dtos/auth_dto
 import dtos/login_dto
 import gleam/bit_array
 import gleam/option.{None, Some}
