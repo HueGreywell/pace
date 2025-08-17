@@ -1,4 +1,5 @@
 import config/cors as c
+import controllers/group_controller
 import controllers/login
 import controllers/refresh_token
 import controllers/register
@@ -20,8 +21,8 @@ pub fn handle_request(
   case wisp.path_segments(req) {
     ["login"] -> login.handler(ctx)
     ["register"] -> register.handler(ctx)
-    ["refresh-token"] -> refresh_token.refresh_token(req, ctx)
-    //["logout"] -> logout.logout_view(req, ctx)
+    ["refresh-token"] -> refresh_token.handler(ctx)
+    ["running-group"] -> group_controller.handler(ctx)
     _ -> wisp.not_found()
   }
 }

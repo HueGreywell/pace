@@ -50,3 +50,9 @@ pub const get_refresh_token_by_user_id = "
     refresh_tokens
   WHERE
     user_id = ?"
+
+pub const create_running_group = "
+  INSERT INTO running_group
+    (id, name, owner_id)
+  VALUES
+    (?, ?, ?)"

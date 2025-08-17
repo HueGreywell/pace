@@ -6,15 +6,15 @@ import utils/exception_response.{respond_with_error}
 import utils/exceptions.{NotAuthenticated}
 import wisp.{type Request, type Response}
 
-pub fn refresh_token(req: Request, ctx: Context) {
-  case req.method {
-    Post -> refresh_token_post(req, ctx)
+pub fn handler(ctx: Context) {
+  case ctx.req.method {
+    Post -> refresh_token_post(ctx)
     _ -> wisp.method_not_allowed([Get, Post])
   }
 }
 
-fn refresh_token_post(req: Request, ctx: Context) -> Response {
-  use json <- wisp.require_json(req)
+fn refresh_token_post(ctx: Context) -> Response {
+  use json <- wisp.require_json(ctx.req)
   let tokens = decode_tokens(json)
 
   case tokens {

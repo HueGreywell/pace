@@ -2,6 +2,9 @@ import birl
 import gleam/list
 import gleam/string
 import gwt
+import models/user
+import utils/context.{type Context}
+import utils/exceptions
 import wisp.{type Request}
 import youid/uuid.{v4_string}
 
@@ -50,6 +53,7 @@ pub fn get_auth_header(req: Request) -> #(Bool, String) {
 pub fn verify_access_token(jwt: String, secret_key: String) -> Bool {
   let jwt_with_signature = gwt.from_signed_string(jwt, secret_key)
   case jwt_with_signature {
+    Error(_) -> False
     Ok(jwt) -> {
       let assert Ok(token_type) = gwt.get_issuer(jwt)
       case token_type {
@@ -57,9 +61,26 @@ pub fn verify_access_token(jwt: String, secret_key: String) -> Bool {
         _ -> False
       }
     }
-    Error(err) -> {
-      echo err
-      False
+  }
+}
+
+pub fn get_user_id(jwt_string: String, secret_key: String) {
+  let decoded = gwt.from_signed_string(jwt_string, secret_key)
+  case decoded {
+    Error(_) -> Error(exceptions.NotAuthenticated)
+    Ok(jwt) -> {
+      let subject = gwt.get_subject(jwt)
+      case subject {
+        Error(_) -> Error(exceptions.NotAuthenticated)
+        Ok(user_id) -> {
+          let issuer = gwt.get_issuer(jwt)
+          case issuer {
+            Error(_) -> Error(exceptions.NotAuthenticated)
+            Ok("access-token") -> Ok(user_id)
+            _ -> Error(exceptions.NotAuthenticated)
+          }
+        }
+      }
     }
   }
 }
