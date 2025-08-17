@@ -2,8 +2,6 @@ import birl
 import gleam/list
 import gleam/string
 import gwt
-import models/user
-import utils/context.{type Context}
 import utils/exceptions
 import wisp.{type Request}
 import youid/uuid.{v4_string}
