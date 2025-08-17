@@ -4,7 +4,7 @@ import services/refresh_token.{generate_tokens, get_user_from_refresh_token}
 import utils/context.{type Context}
 import utils/exception_response.{respond_with_error}
 import utils/exceptions.{NotAuthenticated}
-import wisp.{type Request, type Response}
+import wisp.{type Response}
 
 pub fn handler(ctx: Context) {
   case ctx.req.method {
