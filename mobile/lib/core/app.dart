@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pace/core/l10n/app_localizations.dart';
 import 'package:pace/core/router/router.dart';
 import 'package:pace/presentation/res/theme.dart';
 
@@ -17,6 +18,8 @@ class _AppState extends State<App> {
     return MaterialApp.router(
       theme: AppTheme.theme,
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: [const Locale('en')],
       routerConfig: router,
     );
   }

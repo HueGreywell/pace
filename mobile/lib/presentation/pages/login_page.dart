@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pace/core/l10n/l10n_extension.dart';
 import 'package:pace/core/router/routes.dart';
 import 'package:pace/presentation/bloc/login_cubit/login_cubit.dart';
 import 'package:pace/presentation/widgets/buttons/square_button.dart';
@@ -29,6 +30,7 @@ class _View extends StatefulWidget {
 class _ViewState extends State<_View> {
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -36,22 +38,30 @@ class _ViewState extends State<_View> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('SIGN IN', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500)),
+              Text(
+                l10n.signIn.toUpperCase(),
+                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+              ),
               const SizedBox(height: 40),
-              const EmailInput(),
+              EmailInput(
+                onChanged: (e) {},
+              ),
               const SizedBox(height: 24),
               PasswordInput(
-                label: 'Password',
+                label: l10n.password,
                 onChanged: (s) {},
               ),
               const SizedBox(height: 24),
               TextCTA(
-                question: 'Don\'t have an account?',
-                text: 'Register here',
+                question: l10n.dontHaveAnAccount,
+                text: l10n.registerHere,
                 onPressed: () => RegisterRoute().push(context),
               ),
               const SizedBox(height: 50),
-              SquareButton(onPressed: () {}, text: 'login'),
+              SquareButton(
+                onPressed: () {},
+                text: l10n.signIn,
+              ),
             ],
           ),
         ),
