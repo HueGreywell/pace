@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Input extends StatelessWidget {
+class Input extends StatefulWidget {
   final TextEditingController? textEditingController;
 
   final ValueChanged<String>? onChanged;
@@ -13,15 +13,16 @@ class Input extends StatelessWidget {
 
   final IconData leadingIconData;
 
+  final Widget? suffix;
+
   final TextInputType textInputType;
 
   final bool isObscured;
 
-  final FocusNode? focusNode;
-
   final TextInputAction textInputAction;
 
   const Input({
+    this.suffix,
     this.textEditingController,
     this.onChanged,
     this.validator,
@@ -30,31 +31,60 @@ class Input extends StatelessWidget {
     required this.leadingIconData,
     this.textInputType = TextInputType.text,
     this.isObscured = false,
-    this.focusNode,
     this.textInputAction = TextInputAction.next,
     super.key,
   });
 
   @override
+  State<Input> createState() => _InputState();
+}
+
+class _InputState extends State<Input> {
+  final _focusNode = FocusNode();
+
+  bool hasFocus = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(_onFocusChanged);
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: textEditingController,
-      focusNode: focusNode,
-      keyboardType: textInputType,
-      obscureText: isObscured,
-      textInputAction: textInputAction,
+      controller: widget.textEditingController,
+      focusNode: _focusNode,
+      onChanged: widget.onChanged,
+      validator: widget.validator,
+      keyboardType: widget.textInputType,
+      obscureText: widget.isObscured,
+      textInputAction: widget.textInputAction,
+      style: const TextStyle(fontSize: 16, color: Colors.black),
+      textAlignVertical: TextAlignVertical.center,
       decoration: InputDecoration(
-        labelText: labelText,
-        hintText: hintText,
-        prefixIcon: Icon(leadingIconData),
+        hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
+        hintText: hasFocus ? null : widget.labelText,
+        prefixIcon: Icon(widget.leadingIconData, size: 23),
+        suffixIcon: widget.suffix,
         border: const UnderlineInputBorder(),
         enabledBorder: const UnderlineInputBorder(),
+        contentPadding: const EdgeInsets.symmetric(vertical: 12),
         focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(width: 2),
         ),
       ),
-      onChanged: onChanged,
-      validator: validator,
     );
+  }
+
+  void _onFocusChanged() {
+    if (_focusNode.hasFocus == hasFocus) return;
+    setState(() => hasFocus = _focusNode.hasFocus);
   }
 }

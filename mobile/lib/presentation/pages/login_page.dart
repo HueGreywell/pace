@@ -41,6 +41,7 @@ class _ViewState extends State<_View> {
               const EmailInput(),
               const SizedBox(height: 24),
               PasswordInput(
+                label: 'Password',
                 onChanged: (s) {},
               ),
               const SizedBox(height: 24),

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:pace/presentation/widgets/text_inputs/input.dart';
 
 class PasswordInput extends StatefulWidget {
   final void Function(String) onChanged;
 
   final TextInputAction action;
 
+  final String label;
+
   const PasswordInput({
     required this.onChanged,
+    required this.label,
     this.action = TextInputAction.done,
     super.key,
   });
@@ -16,27 +20,19 @@ class PasswordInput extends StatefulWidget {
 }
 
 class _PasswordInputState extends State<PasswordInput> {
-  bool _isPasswordVisible = false;
+  bool _isObscured = true;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      onChanged: widget.onChanged,
-      obscureText: !_isPasswordVisible,
-      textInputAction: widget.action,
-      autofillHints: const [AutofillHints.password],
-      decoration: InputDecoration(
-        labelText: 'Password',
-        prefixIcon: const Icon(Icons.lock_outline_sharp),
-        border: const UnderlineInputBorder(),
-        enabledBorder: const UnderlineInputBorder(),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(width: 2),
-        ),
-        suffixIcon: IconButton(
-          onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
-          icon: Icon(_isPasswordVisible ? Icons.visibility : Icons.visibility_off),
-          tooltip: _isPasswordVisible ? 'Hide password' : 'Show password',
+    return Input(
+      labelText: widget.label,
+      leadingIconData: Icons.lock_outline_sharp,
+      isObscured: _isObscured,
+      suffix: IconButton(
+        onPressed: () => setState(() => _isObscured = !_isObscured),
+        icon: Icon(
+          _isObscured ? Icons.visibility : Icons.visibility_off,
+          size: 23,
         ),
       ),
     );
