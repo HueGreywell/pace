@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pace/presentation/widgets/buttons/cupertino_btn.dart';
 
 class TextCTA extends StatelessWidget {
   final String question;
@@ -21,11 +22,14 @@ class TextCTA extends StatelessWidget {
       children: [
         Text(question),
         const Text(' '),
-        GestureDetector(
-          onTap: onPressed,
+        CupertinoBtn(
+          onPressed: onPressed,
           child: Text(
             text,
-            style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              color: Colors.redAccent,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ],

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pace/presentation/widgets/buttons/cupertino_btn.dart';
 
 const _textStyle = TextStyle(fontSize: 24, color: Colors.white);
 
@@ -14,16 +15,12 @@ class SquareButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoButton(
-      minSize: 0,
+    return CupertinoBtn(
       onPressed: onPressed,
-      padding: EdgeInsets.zero,
-      borderRadius: BorderRadius.zero,
       child: Container(
-        color: Colors.black,
         padding: _padding,
+        decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(5)),
         child: Align(
-          widthFactor: 1,
           child: Text(
             text,
             style: _textStyle,

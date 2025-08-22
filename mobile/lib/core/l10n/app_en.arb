@@ -3,5 +3,7 @@
   "registerHere": "Register here",
   "password": "Password",
   "signIn": "Sign in",
-  "email": "Email"
+  "email": "Email",
+  "invalidEmail": "Please enter a valid email address.",
+  "passwordIsTooShort": "Password must be 6 characters."
 }
